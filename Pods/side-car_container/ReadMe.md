@@ -75,6 +75,7 @@ az monitor log-analytics workspace create \
   --workspace-name aks-westus-logs \
   --location westus
 ```
+### 🔑 Step 2: Get Workspace ID & Shared Key
 ###  Get Workspace ID
 ```bash
 az monitor log-analytics workspace show \
@@ -90,8 +91,16 @@ az monitor log-analytics workspace get-shared-keys \
   --workspace-name aks-westus-logs \
   --query primarySharedKey -o tsv
 ```
+### 🔒 Step 3: Create Kubernetes Secret
+Replace <workspace-id> and <shared-key> with actual output:
+```bash
+kubectl create secret generic log-analytics-secret \
+  --namespace=default \
+  --from-literal=workspace-id=da7cf587-ddb8-44b2-8951-0c5831239f53 \
+  --from-literal=shared-key=m6sd6f1JIQhwQNCvPj9fn60AjOjSoU4C5ZPQq12FVikRMXELe3CcJY+MvKuqiSqesQndHW7AgOufTFFMEnJjSw==
+```
 
-###⚙️ Step 4: Apply Fluent Bit Config and Microservices
+### ⚙️ Step 4: Apply Fluent Bit Config and Microservices
 Apply the Fluent Bit configuration (sidecar settings and input/output definitions):
 ```bash
 kubectl apply -f fluent-bit-configmap.yaml
@@ -102,7 +111,7 @@ kubectl apply -f microservice-a.yaml
 kubectl apply -f microservice-b.yaml
 ```
 
-###🔍 Step 5: View Logs in Azure Log Analytics
+### 🔍 Step 5: View Logs in Azure Log Analytics
 After a few minutes, go to:
 Azure Portal → Log Analytics Workspace → Logs and run:
 ```bash
@@ -115,6 +124,7 @@ nginxlogs
 
 ```
 This will allow you to filter logs by application, giving DevOps and SRE teams fine-grained observability.
+![image](https://github.com/user-attachments/assets/4aba8f02-acec-44a9-bfc8-bdbd54bad114)
 
 ## 🧠 Why the Sidecar Pattern used for Logging
 
