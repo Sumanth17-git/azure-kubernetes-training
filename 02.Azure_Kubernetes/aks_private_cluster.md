@@ -1,3 +1,81 @@
+ 🌐 Connect to Public AKS Cluster
+
+This guide walks you through connecting to a publicly accessible AKS (Azure Kubernetes Service) cluster using **Windows (PowerShell)** and **Linux (Ubuntu VM)** environments.
+
+---
+
+## 📍 On Windows (PowerShell as Administrator)
+
+### 🧰 Step 1: Install Azure CLI
+
+```powershell
+Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
+Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
+Remove-Item .\AzureCLI.msi
+```
+```bash
+az login
+az login --use-device-code
+az account show --output table
+📍 Set your active subscription:
+az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
+
+📍 Get AKS credentials:
+az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
+
+📍 Verify AKS access:
+kubectl get deployments --all-namespaces=true
+kubectl get pods --all-namespaces=true
+
+📍 On Linux (VM)
+Connect it using Powershell 
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az version
+
+🧰 Step 4: Install Required Tools (Inside VM)
+SSH into the VM and run:
+# Update system
+sudo apt update && sudo apt install -y curl apt-transport-https ca-certificates
+# Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# Install kubectl
+az aks install-cli
+
+# Optional: Install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+🧰 Section 5: Clone Your Repository and Run Setup Scripts
+```bash
+📍 Clone Git Repository:
+
+sudo su
+apt update -y
+apt install git -y
+git clone https://github.com/Sumanth17-git/APMTrianing.git
+cd APMTraining
+📍 Make Scripts Executable:
+chmod +x *
+📍 Run Setup Scripts:
+./setup_ubuntu.sh
+./setup_kubectl.sh
+```
+```bash
+az login
+az login --use-device-code
+az account show --output table
+📍 Set your active subscription:
+az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
+📍 Get AKS credentials:
+az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
+
+📍 Verify AKS access:
+kubectl get deployments --all-namespaces=true
+kubectl get pods --all-namespaces=true
+```
+
+
+
 # 🔒 Azure Kubernetes Service (AKS) – Private Cluster Access Guide
 
 A **Private AKS Cluster** ensures your control plane is **not exposed to the public internet**, increasing security and compliance.
@@ -38,7 +116,8 @@ az vm create \
 
 Once your AKS is private, you **can't run `kubectl` from your local machine** unless you're in the same private network.  
 Azure provides multiple **secure ways** to interact with the cluster:
-
+How to Connect Private Cluster
+ ![image](https://github.com/user-attachments/assets/764c7c12-546e-4b6e-966d-c6600b886fe2)
 ---
 
 ### ✅ Option 1: Use `az aks command invoke` (Recommended)
