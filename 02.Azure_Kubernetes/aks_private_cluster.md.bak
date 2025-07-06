@@ -291,4 +291,13 @@ chmod +x *
 ./setup_kubectl.sh
 
 ```
+### ☸️ Section 6: Connect to AKS Cluster
+```bash
+📍 Get AKS credentials:
+az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
+
+📍 Verify AKS access:
+kubectl get deployments --all-namespaces=true
+kubectl get pods --all-namespaces=true
+```
 

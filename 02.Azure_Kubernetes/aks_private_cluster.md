@@ -301,3 +301,94 @@ kubectl get deployments --all-namespaces=true
 kubectl get pods --all-namespaces=true
 ```
 
+---
+
+## 🖥️ Using an Azure VM to Access an AKS Private Cluster
+
+If your AKS cluster is deployed as a **private cluster**, you cannot access it directly from the internet.  
+Instead, you can use an **Azure Virtual Machine** (VM) within the same **Virtual Network (VNet)** to act as a **Jumpbox or Bastion Host** for private access.
+
+---
+
+### 🛠 Step-by-Step: Create a VM from Azure Portal
+
+---
+
+### 🔹 Step 1: Search for Virtual Machine
+
+- Go to the **Azure Portal**
+- Click **"Create a resource"**
+- Search for **“Virtual machine”** and select it
+
+---
+
+### 🔹 Step 2: Click the `Create` Button
+
+Start creating a new virtual machine.
+
+---
+
+### 🔹 Step 3: Configure Basics
+
+In the **Basics** tab:
+- Select your **Subscription**
+- Choose the **Resource Group**
+- Enter a **name** for your VM
+- Leave default username as: `azureuser`
+- Select image: **Ubuntu 20.04 LTS**
+- Click **Next: Disks**
+
+---
+
+### 🔹 Step 4: Configure Disks
+
+- Leave the defaults on the **Disks** tab
+- Click **Next: Networking**
+
+---
+
+### 🔹 Step 5: Configure Networking
+
+- **Important**: Select the **same Virtual Network (VNet)** and **subnet** used by the AKS private cluster
+
+> 🧠 This ensures the VM can communicate with the AKS cluster privately
+
+---
+
+### 🔹 Step 6: Leave Defaults for Remaining Tabs
+
+- Leave default values for:
+  - **Management**
+  - **Advanced**
+  - **Tags**
+- Click **Next** on each
+
+---
+
+### 🔹 Step 7: Review and Create
+
+- Wait for **"Validation passed"**
+- Click **Create** to deploy the VM
+
+---
+
+### 🔹 Step 8: Download Private SSH Key
+
+- Once the VM creation process prompts you, **download the PEM key**
+- This key is used to SSH into your VM securely
+
+> 🔐 Store this file securely. You’ll use it in PowerShell or Linux/macOS terminal.
+
+---
+
+### 🔹 Step 9: SSH into the VM
+
+After deployment:
+- Go to the **VM Overview tab**
+- Copy the **public IP address**
+
+Use the following command to SSH from your local terminal:
+
+```bash
+ssh -i ./azurejump-server_key.pem azureuser@<VM_PUBLIC_IP>
+
