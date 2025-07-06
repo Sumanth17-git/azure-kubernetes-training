@@ -188,7 +188,7 @@ If you want to **create**, **update**, **delete**, or **retrieve** any Kubernete
 kubectl get pods
 kubectl create -f deployment.yaml
 kubectl delete service my-service
-
+```
 ## 🧠 Control Plane Components (Continued)
 
 ---

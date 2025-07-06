@@ -8,7 +8,7 @@ This section explains what happens **behind the scenes** when you deploy somethi
 
 ```bash
 kubectl apply -f my-app.yaml
-
+```
 This command sends a request to the Kubernetes API Server (kube-apiserver).
 🔍 What Happens:
 ✅ The API Server receives and parses the YAML file.

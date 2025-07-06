@@ -40,7 +40,6 @@ Number of replicas, image info, container ports, labels, etc.
 
 🔧 Components Involved:
 kube-apiserver
-
 etcd
 
 🧠 etcd now holds the desired configuration — e.g., “I want 3 replicas of nginx running in the dev namespace.”
