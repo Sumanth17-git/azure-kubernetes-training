@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-tomcat-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://localhost:8080;
+        }
+    }
