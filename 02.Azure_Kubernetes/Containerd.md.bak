@@ -1,0 +1,68 @@
+# 🐳 Container Runtime in AKS: containerd (Not Docker)
+
+## 📌 Summary
+
+As of recent AKS versions, **containerd** is the default container runtime replacing Docker. It is lightweight, optimized for Kubernetes, and fully compatible with the **CRI (Container Runtime Interface)** used by Kubernetes.
+
+You can verify the container runtime on your AKS nodes using:
+
+```bash
+kubectl get nodes -o wide
+## 🛠️ Using `crictl` to Inspect Containers
+
+When you're using **containerd** as the container runtime (the default in AKS), Docker CLI commands like `docker ps` won’t work.
+
+Instead, use [`crictl`](https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/), a CLI tool for working with **CRI-compatible** runtimes like `containerd` and `CRI-O`.
+
+### 🔍 Why `crictl`?
+
+Kubernetes no longer requires Docker as a runtime. Tools like `crictl` are now essential for low-level container inspection when using CRI-compliant runtimes.
+
+---
+
+### 🔧 Install `crictl`
+
+You can download it from the GitHub releases:
+
+```bash
+# Example for Linux
+VERSION="v1.28.0"
+curl -LO https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
+sudo tar -C /usr/local/bin -xzf crictl-$VERSION-linux-amd64.tar.gz
+
+```
+
+
+## 📦 Common `crictl` Commands
+
+`crictl` is the CLI tool for container runtime debugging and management on CRI-compatible runtimes like `containerd` or `CRI-O`.
+
+| Command                        | Description                                |
+|-------------------------------|--------------------------------------------|
+| `crictl ps`                   | List all **running containers**            |
+| `crictl ps -a`                | List **all containers**, including stopped |
+| `crictl pods`                 | Show all **pods** known to the runtime     |
+| `crictl inspect <container_id>` | View **detailed info** about a container  |
+| `crictl logs <container_id>`    | Show **logs** of a container              |
+| `crictl exec -it <container_id>` | **Exec** into a running container       |
+| `crictl stats`               | View **resource usage** stats              |
+
+> 🧠 Tip: You must be connected to the host node (e.g., via `kubectl debug node/...` and `chroot /host`) to use `crictl`.
+
+---
+
+### ✅ Example
+
+```bash
+# List all containers
+crictl ps -a
+
+# Inspect a container
+crictl inspect <container_id>
+
+# View logs
+crictl logs <container_id>
+
+# Exec into container
+crictl exec -it <container_id> sh
+```
