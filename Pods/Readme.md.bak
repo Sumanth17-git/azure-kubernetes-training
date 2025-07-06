@@ -1,0 +1,57 @@
+# 📦 Introduction to Kubernetes Objects and Pod YAML Structure
+
+## 🧠 What are Kubernetes Objects?
+
+Kubernetes **objects** are like instructions or blueprints that tell Kubernetes **how to manage your application and resources**. These objects define:
+
+- ✅ What to run (app, service, job, etc.)
+- 📦 How many copies should run
+- 🔗 How it connects to other services
+- 💾 How data is stored and persisted
+
+> Think of Kubernetes objects as **declarative blueprints** that define your desired state.
+
+---
+## 🧱 Why Pods, Not Just Containers?
+
+Kubernetes doesn't manage containers directly. Instead, it manages **Pods**, which are the **smallest deployable unit** in Kubernetes.
+
+### 🗳️ What is a Pod?
+
+A **Pod** is like a **box** that can hold one or more containers. It includes:
+- Containers (e.g., NGINX, app, logger)
+- Storage (volumes)
+- Network configuration (IP, ports)
+
+```bash
+# Command to create a Pod manually
+kubectl run nginx --image=nginx:latest
+Example: A Pod might contain a web app container and a log forwarder sidecar container — both working together.
+
+## 🧭 Choosing the Right `apiVersion`
+
+Different Kubernetes objects are managed under different **API groups**, and each uses a specific `apiVersion`.
+
+This field tells Kubernetes which **versioned API** to use for validating and interpreting the object.
+
+---
+
+### 📘 Common `apiVersion` Mappings
+
+| 🧩 **Object Type**        | 🔢 **apiVersion Example** |
+|---------------------------|---------------------------|
+| Pod, Service, ConfigMap   | `v1`                      |
+| Deployment, StatefulSet   | `apps/v1`                 |
+| Job, CronJob              | `batch/v1`                |
+
+---
+
+### 🔗 Reference:
+
+For a complete and up-to-date guide on Kubernetes API versions:
+👉 [Kubernetes API Version Guide – Matthew Palmer](https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html)
+
+---
+
+> ✅ Tip: Always check your Kubernetes cluster version to ensure the object `apiVersion` is supported.
+
