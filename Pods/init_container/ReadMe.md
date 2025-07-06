@@ -5,6 +5,7 @@
 **Init containers** are special containers in Kubernetes that **run before the main application containers** in a Pod. They are designed to **perform setup or initialization tasks** that must complete successfully **before** the main containers can start.
 
 Kubernetes Pods can have **multiple containers** working together. Init containers help **prepare the environment** for the main application containers to run smoothly.
+![image](https://github.com/user-attachments/assets/d6a04db0-2e7f-4dc7-b3cb-7a3fcb9b5f01)
 
 ---
 
@@ -15,6 +16,8 @@ Kubernetes Pods can have **multiple containers** working together. Init containe
 - They run **sequentially** — each waits for the previous one to complete.
 
 ---
+![image](https://github.com/user-attachments/assets/cfaaf6e2-629f-43ea-984d-2af5cf0fea3a)
+
 
 ## 🎯 Real-Time Use Case
 
