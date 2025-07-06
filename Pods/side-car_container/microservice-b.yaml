@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-b
+  template:
+    metadata:
+      labels:
+        app: microservice-b
+    spec:
+      volumes:
+        - name: varlog
+          emptyDir: {}
+        - name: fluentbit-config
+          configMap:
+            name: fluent-bit-config
+      containers:
+        - name: nginx
+          image: nginx
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log/nginx
+          ports:
+            - containerPort: 80
+        - name: fluent-bit
+          image: fluent/fluent-bit:1.9
+          env:
+            - name: APP_NAME
+              value: microservice-b
+            - name: WORKSPACE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: log-analytics-secret
+                  key: workspace-id
+            - name: SHARED_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: log-analytics-secret
+                  key: shared-key
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log/nginx
+            - name: fluentbit-config
+              mountPath: /fluent-bit/etc/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-b
+spec:
+  selector:
+    app: microservice-b
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+type: LoadBalancer

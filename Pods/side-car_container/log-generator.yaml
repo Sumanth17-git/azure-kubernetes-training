@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-generator
+spec:
+  containers:
+    - name: curl
+      image: curlimages/curl:latest
+      command:
+        - sh
+        - -c
+        - |
+          while true; do
+            echo "Hitting microservice-a..."
+            curl -s microservice-a.default.svc.cluster.local
+            echo "Hitting microservice-b..."
+            curl -s microservice-b.default.svc.cluster.local
+            sleep 5
+          done
