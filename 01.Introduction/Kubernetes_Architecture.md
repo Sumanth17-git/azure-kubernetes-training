@@ -133,6 +133,7 @@ A **pod** is the smallest and simplest Kubernetes object. It usually contains:
 > Think of a Pod as a wrapper around your application containers.
 
 ---
+![image](https://github.com/user-attachments/assets/0e4880e6-e393-4134-b9f0-7531d23cc136)
 
 ## 🧠 Control Plane = The Brain of Kubernetes
 
