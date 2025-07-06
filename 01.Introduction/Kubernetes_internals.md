@@ -63,6 +63,7 @@ After validating the request, the **API Server** stores the **desired state** (e
 ---
 
 ---
+![image](https://github.com/user-attachments/assets/30bcb36c-ddb6-49fe-9971-9ebb5c773c0d)
 
 ### 🧠 Step 3: Scheduler Decides Where to Run the Pod
 
@@ -267,3 +268,16 @@ To make the application accessible, Kubernetes uses **Services**.
 
 ### 🌩️ What is the Azure Cloud Controller Manager?
 - The Cloud Controller Manager (CCM) in Kubernetes is responsible for integrating your cluster with the underlying cloud provider (in this case, Azure).In AKS, Azure Cloud Controller Manager handles cloud-specific resources like:
+![image](https://github.com/user-attachments/assets/6b766896-ff55-42a4-b5e9-408983170b2e)
+
+
+![image](https://github.com/user-attachments/assets/0d1f9a3f-f7b3-463d-96d5-e381401ad1f1)
+
+![image](https://github.com/user-attachments/assets/ec3c07d7-8847-40df-a287-a451c6de45fd)
+
+![image](https://github.com/user-attachments/assets/ef743b49-c53d-4ecc-bdf7-cdd623bc5257)
+
+![image](https://github.com/user-attachments/assets/8bc58d52-767a-4b62-a4d5-3385adfe1a04)
+
+
+
