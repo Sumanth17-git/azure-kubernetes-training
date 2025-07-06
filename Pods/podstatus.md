@@ -1,6 +1,7 @@
 ## ⚠️ Pod STATUS FIELDS You Might See
 
 Understanding what each pod status means helps you troubleshoot and debug your workloads.
+![image](https://github.com/user-attachments/assets/a44ba842-7f7d-4252-adf5-d85082997d73)
 
 ### 📊 Quick Reference Table
 
