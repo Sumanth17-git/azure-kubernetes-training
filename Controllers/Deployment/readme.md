@@ -138,7 +138,7 @@ spec:
     matchLabels:
       app: nginx
   template:
-    ...
+```
 ### 2️⃣ `spec` at the Pod Template Level (`template.spec`)
 
 This `spec` block is located **inside the `template` section** of a Deployment.  
@@ -204,19 +204,100 @@ spec:                        # Deployment-level spec
 ```
 
 
-
-
 # Apply the deployment
+```bash
 kubectl apply -f nginx-deployment.yaml
-
+```
 # Watch the pods being created
+```bash
 kubectl get pods -l app=nginx -w
-
+```
 # Update image to simulate a rolling update
+```bash
 kubectl set image deployment/nginx-deployment nginx-container=nginx:1.21
-
+```
 # Check rollout status
+```bash
 kubectl rollout status deployment/nginx-deployment
-
+```
 # Rollback if needed
+```bash
 kubectl rollout undo deployment/nginx-deployment
+```
+
+## 📄 Full Deployment YAML Manifest with All Key Fields
+
+```yaml
+apiVersion: apps/v1                      # API version for Deployment
+kind: Deployment                         # Type of Kubernetes object
+metadata:
+  name: my-nginx-deployment              # Unique name of the Deployment
+  namespace: default                     # (Optional) Namespace where it will be deployed
+  labels:                                # Labels for identification and selection
+    app: nginx
+    tier: frontend
+  annotations:                           # (Optional) Descriptive metadata
+    createdBy: "DevOps Team"
+    description: "Nginx deployment with 3 replicas and rolling update"
+
+spec:                                    # Deployment-level spec
+  replicas: 3                            # Desired number of pod replicas
+  revisionHistoryLimit: 5               # (Optional) Number of old ReplicaSets to retain for rollback
+  strategy:                              # Strategy for updating pods
+    type: RollingUpdate                  # RollingUpdate or Recreate
+    rollingUpdate:
+      maxSurge: 1                        # Max extra pods during update
+      maxUnavailable: 1                  # Max pods that can be unavailable during update
+  selector:                              # Defines which Pods this Deployment manages
+    matchLabels:
+      app: nginx
+  template:                              # Pod template
+    metadata:
+      labels:
+        app: nginx                       # Must match the selector
+        tier: frontend
+    spec:                                # Pod-level spec
+      containers:
+        - name: nginx-container
+          image: nginx:latest            # Container image
+          imagePullPolicy: IfNotPresent  # Pull policy (Always / IfNotPresent / Never)
+          ports:
+            - containerPort: 80          # Port exposed inside the container
+              protocol: TCP
+          env:                           # (Optional) Environment variables
+            - name: ENVIRONMENT
+              value: production
+          resources:                     # (Optional) Resource requests and limits
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          livenessProbe:                 # (Optional) Liveness probe
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:                # (Optional) Readiness probe
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      restartPolicy: Always              # (Default) Always restart failed containers
+      terminationGracePeriodSeconds: 30 # Time to wait before killing container on termination
+
+
+### 🧠 Highlights of Key Fields
+
+| Field                         | Description                                                             |
+|------------------------------|-------------------------------------------------------------------------|
+| `replicas`                   | How many identical Pods to maintain                                     |
+| `strategy`                   | Defines rolling update behavior (e.g., max surge, max unavailable)      |
+| `selector.matchLabels`       | Ensures Pods created by the Deployment match the specified labels       |
+| `template.spec.containers`   | Main container details — image, ports, environment variables, probes    |
+| `resources`                  | CPU/memory requests and limits for performance and fairness             |
+| `livenessProbe` / `readinessProbe` | Health checks to detect unresponsive or unready containers         |
+| `revisionHistoryLimit`       | Number of old ReplicaSets to retain for rollback (default: 10)          |
