@@ -1,3 +1,81 @@
+ 🌐 Connect to Public AKS Cluster
+
+This guide walks you through connecting to a publicly accessible AKS (Azure Kubernetes Service) cluster using **Windows (PowerShell)** and **Linux (Ubuntu VM)** environments.
+
+---
+
+## 📍 On Windows (PowerShell as Administrator)
+
+### 🧰 Step 1: Install Azure CLI
+
+```powershell
+Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
+Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
+Remove-Item .\AzureCLI.msi
+```
+```bash
+az login
+az login --use-device-code
+az account show --output table
+📍 Set your active subscription:
+az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
+
+📍 Get AKS credentials:
+az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
+
+📍 Verify AKS access:
+kubectl get deployments --all-namespaces=true
+kubectl get pods --all-namespaces=true
+
+📍 On Linux (VM)
+Connect it using Powershell 
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az version
+
+🧰 Step 4: Install Required Tools (Inside VM)
+SSH into the VM and run:
+# Update system
+sudo apt update && sudo apt install -y curl apt-transport-https ca-certificates
+# Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# Install kubectl
+az aks install-cli
+
+# Optional: Install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+🧰 Section 5: Clone Your Repository and Run Setup Scripts
+```bash
+📍 Clone Git Repository:
+
+sudo su
+apt update -y
+apt install git -y
+git clone https://github.com/Sumanth17-git/APMTrianing.git
+cd APMTraining
+📍 Make Scripts Executable:
+chmod +x *
+📍 Run Setup Scripts:
+./setup_ubuntu.sh
+./setup_kubectl.sh
+```
+```bash
+az login
+az login --use-device-code
+az account show --output table
+📍 Set your active subscription:
+az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
+📍 Get AKS credentials:
+az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
+
+📍 Verify AKS access:
+kubectl get deployments --all-namespaces=true
+kubectl get pods --all-namespaces=true
+```
+
+
+
 # 🔒 Azure Kubernetes Service (AKS) – Private Cluster Access Guide
 
 A **Private AKS Cluster** ensures your control plane is **not exposed to the public internet**, increasing security and compliance.
@@ -38,7 +116,8 @@ az vm create \
 
 Once your AKS is private, you **can't run `kubectl` from your local machine** unless you're in the same private network.  
 Azure provides multiple **secure ways** to interact with the cluster:
-
+How to Connect Private Cluster
+ ![image](https://github.com/user-attachments/assets/764c7c12-546e-4b6e-966d-c6600b886fe2)
 ---
 
 ### ✅ Option 1: Use `az aks command invoke` (Recommended)
@@ -319,12 +398,14 @@ Instead, you can use an **Azure Virtual Machine** (VM) within the same **Virtual
 - Go to the **Azure Portal**
 - Click **"Create a resource"**
 - Search for **“Virtual machine”** and select it
+![image](https://github.com/user-attachments/assets/f3df3daa-e4bf-4d8e-a030-9339aaffae20)
 
 ---
 
 ### 🔹 Step 2: Click the `Create` Button
 
 Start creating a new virtual machine.
+![image](https://github.com/user-attachments/assets/e7189702-f46f-4f1d-b26e-e9831dc1999e)
 
 ---
 
@@ -337,6 +418,7 @@ In the **Basics** tab:
 - Leave default username as: `azureuser`
 - Select image: **Ubuntu 20.04 LTS**
 - Click **Next: Disks**
+![image](https://github.com/user-attachments/assets/d5ef6f7c-697a-452c-9355-2a028c1dea54)
 
 ---
 
@@ -344,6 +426,7 @@ In the **Basics** tab:
 
 - Leave the defaults on the **Disks** tab
 - Click **Next: Networking**
+![image](https://github.com/user-attachments/assets/0b637d87-1f89-4c6b-b340-b44a791a3811)
 
 ---
 
@@ -352,6 +435,7 @@ In the **Basics** tab:
 - **Important**: Select the **same Virtual Network (VNet)** and **subnet** used by the AKS private cluster
 
 > 🧠 This ensures the VM can communicate with the AKS cluster privately
+![image](https://github.com/user-attachments/assets/b000431d-dc7f-40e7-b9f5-ee2238b2401c)
 
 ---
 
@@ -362,6 +446,7 @@ In the **Basics** tab:
   - **Advanced**
   - **Tags**
 - Click **Next** on each
+![image](https://github.com/user-attachments/assets/bf88552d-606e-4f54-8ca8-187fbf457c69)
 
 ---
 
@@ -369,6 +454,7 @@ In the **Basics** tab:
 
 - Wait for **"Validation passed"**
 - Click **Create** to deploy the VM
+![image](https://github.com/user-attachments/assets/a8f11693-072e-42c4-a23e-9de6a36f4e5f)
 
 ---
 
@@ -378,6 +464,7 @@ In the **Basics** tab:
 - This key is used to SSH into your VM securely
 
 > 🔐 Store this file securely. You’ll use it in PowerShell or Linux/macOS terminal.
+![image](https://github.com/user-attachments/assets/fa58973b-7f26-4778-8ef6-f3912b1ae848)
 
 ---
 
@@ -386,9 +473,10 @@ In the **Basics** tab:
 After deployment:
 - Go to the **VM Overview tab**
 - Copy the **public IP address**
+![image](https://github.com/user-attachments/assets/b903b59f-7c44-483b-898a-deb5c33f6a10)
 
 Use the following command to SSH from your local terminal:
 
 ```bash
 ssh -i ./azurejump-server_key.pem azureuser@<VM_PUBLIC_IP>
-
+```
