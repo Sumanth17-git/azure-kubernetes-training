@@ -111,3 +111,6 @@ NAME                         STATUS   ROLES   AGE     VERSION
 aks-nodepool-12345678-vm0    Ready    agent   10d     v1.30.1
 virtual-node-aci-linux       Ready    agent   2d      v1.30.1
 ```
+
+
+![image](https://github.com/user-attachments/assets/4448a435-1778-4f25-9d6a-a9e4a44e4b91)
