@@ -21,20 +21,23 @@ az account show --output table
 az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
 ```
 📍 Get AKS credentials:
+```bash
 az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
-
+```
 📍 Verify AKS access:
+```bash
 kubectl get deployments --all-namespaces=true
 kubectl get pods --all-namespaces=true
-
+```
 📍 On Linux (VM)
 Connect it using Powershell 
-
+```bash
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az version
-
+```
 🧰 Step 4: Install Required Tools (Inside VM)
 SSH into the VM and run:
+```bash
 # Update system
 sudo apt update && sudo apt install -y curl apt-transport-https ca-certificates
 # Install Azure CLI
