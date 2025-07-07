@@ -105,6 +105,8 @@ az vm create \
 
 ---
 
+```
+
 ## ✅ Key Points: Jumpbox VM for AKS Private Cluster
 
 | Feature                | Description                                           |
