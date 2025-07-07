@@ -19,7 +19,7 @@ az login --use-device-code
 az account show --output table
 📍 Set your active subscription:
 az account set --subscription "24c4fb07-0fb5-4b37-bc45-5cb7e6e95520"
-
+```
 📍 Get AKS credentials:
 az aks get-credentials --resource-group internal-training --name aks-training --overwrite-existing
 
