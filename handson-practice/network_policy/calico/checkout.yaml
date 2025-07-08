@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: checkout
+  namespace: team-api
+  labels:
+    role: checkout
+spec:
+  containers:
+  - name: web
+    image: nginx
+    ports:
+    - containerPort: 80

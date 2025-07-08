@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-microservice
+  labels:
+    app: springboot-microservice
+spec:
+  replicas: 1  # Updated replicas for high availability
+  selector:
+    matchLabels:
+      app: springboot-microservice
+  template:
+    metadata:
+      labels:
+        app: springboot-microservice
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: access
+                    operator: In
+                    values:
+                      - public
+      containers:
+      - name: springboot-microservice
+        image: skrisacr.azurecr.io/springbootapp:v2
+        ports:
+          - containerPort: 8881  # Application container port
+

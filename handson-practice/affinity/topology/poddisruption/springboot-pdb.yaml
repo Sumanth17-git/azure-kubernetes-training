@@ -1,0 +1,11 @@
+# springboot-pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: springboot-app-pdb
+spec:
+  minAvailable: 6
+  selector:
+    matchLabels:
+      app: springboot-app
+

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      volumes:
+        - name: applog
+          emptyDir: {}
+        - name: fluentbit-config-java
+          configMap:
+            name: fluent-bit-config-java
+      containers:
+        - name: springboot
+          image: skrisacr.azurecr.io/springbootapp:v1
+          ports:
+            - containerPort: 8881
+          volumeMounts:
+            - name: applog
+              mountPath: /usr/app/logs
+        - name: fluent-bit
+          image: fluent/fluent-bit:1.9
+          env:
+            - name: APP_NAME
+              value: springboot-app
+            - name: WORKSPACE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: log-analytics-secret
+                  key: workspace-id
+            - name: SHARED_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: log-analytics-secret
+                  key: shared-key
+          volumeMounts:
+            - name: applog
+              mountPath: /usr/app/logs
+            - name: fluentbit-config-java
+              mountPath: /fluent-bit/etc/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-app-service
+spec:
+  selector:
+    app: springboot-app
+  ports:
+    - protocol: TCP
+      port: 8881
+      targetPort: 8881
+  type: LoadBalancer
+

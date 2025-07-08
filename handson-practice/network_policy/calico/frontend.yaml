@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  namespace: team-ui
+  labels:
+    role: frontend
+spec:
+  containers:
+  - name: curl
+    image: radial/busyboxplus:curl
+    command: ["sleep", "3600"]
