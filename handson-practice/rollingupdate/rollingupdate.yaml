@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: springboot
-          image: skrisacr.azurecr.io/springbootapp:v1
+          image: skrisacr.azurecr.io/springbootapp:v2
           ports:
             - containerPort: 8881
 ---
