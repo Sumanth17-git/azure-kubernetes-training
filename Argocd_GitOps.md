@@ -49,7 +49,7 @@ Argo CD running in AKS
    v
 AKS Cluster (actual state updated)
 
-
+```
 # 🚀 Step-by-Step GitOps Flow
 
 ---
