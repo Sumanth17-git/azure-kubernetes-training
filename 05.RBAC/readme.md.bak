@@ -1,0 +1,12 @@
+# 🔐 What is RBAC in Kubernetes?
+
+**RBAC (Role-Based Access Control)** controls **who can do what** within your Kubernetes cluster.
+
+RBAC defines access based on:
+
+- **Who** (subjects)  
+- **Can do what** (verbs)  
+- **On which resources**  
+- **In what namespace**
+
+This enables fine-grained access control over Kubernetes resources by assigning roles to users or groups and specifying their permissions within a namespace or cluster-wide.

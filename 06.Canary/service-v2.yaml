@@ -1,0 +1,12 @@
+# service-v2.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-v2
+spec:
+  selector:
+    app: myapp
+    version: v2
+  ports:
+    - port: 80
+      targetPort: 80
