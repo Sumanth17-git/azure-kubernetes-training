@@ -110,4 +110,86 @@ helm install argocd argo/argo-cd \
 ```
 -- 🔐 Replace the hashed password with the output from your htpasswd command.
 
+```bash
+kubectl get pods -n argocd
+kubectl get svc argocd-server -n argocd
 
+✅ Step 4: Login
+•	Username: admin
+•	Password: admin@123 
+```
+
+### Create a new APplication using manifests
+```bash
+argocd-app.yaml
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Sumanth17-git/argocd-demo.git
+    targetRevision: main
+    path: .     # since deployment.yaml is in the root
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+```
+✅ Apply the Application to Argo CD
+kubectl apply -f argocd-app.yaml
+
+## 🛠️ How to Make It Faster (Optional)
+
+You can reduce Argo CD's Git polling and repo sync latency by setting the following flags during installation or upgrade:
+
+- `--repo-server.repo.poll.interval`: Controls how frequently Argo CD polls the Git repository (default: 3 minutes)
+- `--controller.repoServerTimeoutSeconds`: Timeout for controller requests to the repo server
+
+### 🔧 Update Argo CD with Faster Polling
+
+```bash
+helm upgrade argocd argo/argo-cd \
+  --namespace argocd \
+  --set repoServer.extraArgs="{--repo.poll.interval=30s}" \
+  --set controller.repoServerTimeoutSeconds=60
+
+
+## ⚡ BEST OPTION: Use Git Webhooks (Instant Detection)
+
+Instead of relying on polling intervals, use a **Git webhook** to instantly notify Argo CD when a commit is pushed.
+
+### 🛠️ Steps for GitHub:
+
+1. Go to your GitHub repository → **Settings** → **Webhooks**
+2. Click **Add webhook**
+3. Fill in the following details:
+
+   - **URL**:  
+     ```
+     http://<argocd-repo-server-service>:8081/api/webhook
+     ```
+   - **Content type**:  
+     ```
+     application/json
+     ```
+   - **Secret**: *(Optional)* — can be used for verifying the payload
+   - **Events**:  
+     Select **Just the push event**
+
+4. Click **Add webhook**
+
+---
+
+✅ Now, Argo CD will receive an event **immediately after every push**, and it will fetch + sync changes **instantly**.
+
+> 💡 Ideal for low-latency GitOps workflows in CI/CD pipelines.
+
+####  Multi-cluster GitOps setup
