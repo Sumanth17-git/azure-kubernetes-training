@@ -77,3 +77,37 @@ A developer makes a change (e.g., updates `deployment.yaml`) and pushes it to th
 ✅ No manual `kubectl apply`  
 ✅ Full audit/history in Git  
 ✅ Cluster always reflects Git = **Single Source of Truth**
+
+# 🚀 Install Argo CD with Helm and Set Admin Password
+
+This guide explains how to install Argo CD on a Kubernetes cluster using Helm and set a custom admin password securely.
+
+---
+
+## 📁 Step 0: Create Namespace for Argo CD
+
+```bash
+kubectl create namespace argocd
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+```
+## 🔐 Step 1: Generate bcrypt Hash for `admin@123`
+
+Install Apache utilities (for `htpasswd`) on Debian/Ubuntu:
+
+```bash
+sudo apt install apache2-utils
+htpasswd -nbBC 10 "" admin@123 | tr -d ':\n' | sed 's/$2y/$2a/'
+```
+### 🛠 Step 2: Install Argo CD with Helm and set the password
+```bash
+helm install argocd argo/argo-cd \
+  --namespace argocd \
+  --create-namespace \
+  --set server.service.type=LoadBalancer \
+  --set configs.params.server.insecure=true \
+  --set-string "configs.secret.argocdServerAdminPassword=\$2a\$10\$9NPKk3cEQczH8uqoN6YcDuwYjEkFZ5I6oncoRIyGjRt4bT47O4hfK"
+```
+-- 🔐 Replace the hashed password with the output from your htpasswd command.
+
+
