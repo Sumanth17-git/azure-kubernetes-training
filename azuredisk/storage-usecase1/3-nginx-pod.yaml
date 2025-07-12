@@ -1,0 +1,19 @@
+# 3-nginx-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-on-azure-disk
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - mountPath: /mnt/azure
+          name: disk-storage
+  volumes:
+    - name: disk-storage
+      persistentVolumeClaim:
+        claimName: azure-managed-disk-pvc
+

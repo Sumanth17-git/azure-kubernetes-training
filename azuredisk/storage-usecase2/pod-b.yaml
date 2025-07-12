@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-b
+spec:
+  containers:
+  - name: reader
+    image: busybox
+    command: ["/bin/sh", "-c", "while true; do sleep 30; done;"]
+    volumeMounts:
+    - name: azurefile-vol
+      mountPath: /mnt/shared
+  volumes:
+  - name: azurefile-vol
+    persistentVolumeClaim:
+      claimName: azurefile-pvc
+

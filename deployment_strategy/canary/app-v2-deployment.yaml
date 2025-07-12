@@ -1,0 +1,44 @@
+# app-v2-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-v2
+  labels:
+    app: myapp
+    version: v2
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v2
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: html
+          configMap:
+            name: v2-html
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: v2-html
+data:
+  index.html: |
+    <html><body><h1>Welcome to V2 (Canary)</h1></body></html>
+

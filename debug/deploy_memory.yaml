@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggyapp-memory
+  labels:
+    app: buggyapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buggyapp
+  template:
+    metadata:
+      labels:
+        app: buggyapp
+    spec:
+      containers:
+        - name: buggyapp
+          image: sumanth17121988/buggyapp:1
+          env:
+            - name: PROBLEM
+              value: "PROBLEM_OOM"
+

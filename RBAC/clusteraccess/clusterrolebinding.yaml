@@ -1,0 +1,14 @@
+# clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-admin-binding
+subjects:
+- kind: ServiceAccount
+  name: testuser
+  namespace: demo-rbac
+roleRef:
+  kind: ClusterRole
+  name: pod-admin
+  apiGroup: rbac.authorization.k8s.io
+

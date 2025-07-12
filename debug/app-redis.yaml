@@ -1,0 +1,11 @@
+# redis-client-fail.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-client
+spec:
+  containers:
+  - name: redis-app
+    image: redis:6
+    command: ["sh", "-c", "redis-cli -h redis-service ping || sleep 360"]
+
