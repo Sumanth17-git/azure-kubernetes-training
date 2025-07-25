@@ -1,0 +1,50 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "buggycpu"
+  namespace: "default"
+  labels:
+    app: "buggycpu"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "buggycpu"
+  template:
+    metadata:
+      labels:
+        app: "buggycpu"
+    spec:
+      containers:
+      - name: buggycpu
+        image: sumanth17121988/buggyapp:v1
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1024Mi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "buggycpu-hpa"
+  namespace: "default"
+  labels:
+    app: "buggycpu"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "buggycpu"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 8
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80

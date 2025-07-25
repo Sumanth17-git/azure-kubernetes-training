@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-or-affinity
+  labels:
+    app: springboot-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: env
+                    operator: In
+                    values: [prod]
+              - matchExpressions:
+                  - key: team
+                    operator: In
+                    values: [analytics]
+      containers:
+        - name: springboot-app
+          image: sumanth17121988/appjava:1
+          ports:
+            - name: metrics-port
+              containerPort: 8881
+

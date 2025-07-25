@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: sumanth17121988/springbootmetric
+  tag: "1"
+
+service:
+  port: 80
+  targetPort: 8881
+

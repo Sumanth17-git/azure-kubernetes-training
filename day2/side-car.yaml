@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-fluentbit
+spec:
+  volumes:
+  - name: varlog
+    emptyDir: {}
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log/nginx
+  - name: fluentbit
+    image: fluent/fluent-bit
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log/nginx
+

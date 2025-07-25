@@ -1,0 +1,14 @@
+# test-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rbac-test
+  namespace: demo-rbac
+spec:
+  serviceAccountName: dummy-user
+  containers:
+  - name: tester
+    image: bitnami/kubectl:latest
+    command: ["/bin/sh", "-c"]
+    args: ["sleep 3600"]
+

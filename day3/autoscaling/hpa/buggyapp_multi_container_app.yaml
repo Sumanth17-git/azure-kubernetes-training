@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggycpu
+  labels:
+    app: buggycpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buggycpu
+  template:
+    metadata:
+      labels:
+        app: buggycpu
+    spec:
+      containers:
+        - name: buggycpu
+          image: sumanth17121988/buggyapp:v1
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+        - name: fluentbit
+          image: nginx
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+

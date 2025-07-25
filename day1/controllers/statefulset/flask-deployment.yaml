@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-flask
+  template:
+    metadata:
+      labels:
+        app: redis-flask
+    spec:
+      containers:
+      - name: redis-flask
+        image: sumanth17121988/mypythonapp:latest   # Replace with your real image name
+        ports:
+        - containerPort: 5000
+        env:
+          - name: REDIS_HOST
+            value: "redis-0.redis.default.svc.cluster.local"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-flask-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: redis-flask
+  ports:
+  - port: 5000
+    targetPort: 5000
+

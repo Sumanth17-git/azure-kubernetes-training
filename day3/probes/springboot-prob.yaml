@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+  labels:
+    app: springboot-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8881"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+      - name: springboot-app
+        image: sumanth17121988/springbootmetric:1
+        ports:
+        - name: metrics-port
+          containerPort: 8881
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
+
+        # ✅ Added startupProbe
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8881
+          failureThreshold: 30    # Retry for 30 x 5s = 150s max wait time
+          periodSeconds: 5
+
+        # ✅ Existing liveness probe
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8881
+          initialDelaySeconds: 10
+          periodSeconds: 10
+
+        # ✅ Existing readiness probe
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8881
+          initialDelaySeconds: 5
+          periodSeconds: 5
+

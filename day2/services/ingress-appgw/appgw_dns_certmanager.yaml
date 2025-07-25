@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    appgw.ingress.kubernetes.io/health-probe-path: /                # AGIC health probe
+    cert-manager.io/cluster-issuer: letsencrypt                     # Reference the ClusterIssuer
+    acme.cert-manager.io/http01-ingress-class: azure-application-gateway  # Tells cert-manager which ingress class to use for HTTP01
+spec:
+  ingressClassName: azure-application-gateway                       # AGIC ingress controller
+  tls:
+  - hosts:
+      - app.monitorminds.net
+    secretName: app-monitorminds-tls                                # cert-manager will create this secret
+  rules:
+  - host: "app.monitorminds.net"
+    http:
+      paths:
+      - path: /app1
+        pathType: Prefix
+        backend:
+          service:
+            name: app1-nginx-clusterip-service
+            port:
+              number: 80
+      - path: /app2
+        pathType: Prefix
+        backend:
+          service:
+            name: app2-nginx-clusterip-service
+            port:
+              number: 80
+

@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggycpu
+  namespace: default
+  labels:
+    app: buggycpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buggycpu
+  template:
+    metadata:
+      labels:
+        app: buggycpu
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-type
+                    operator: In
+                    values:
+                      - aks
+      tolerations:
+        - key: "virtual-kubelet.io/provider"
+          operator: "Equal"
+          value: "azure"
+          effect: "NoSchedule"
+      containers:
+        - name: buggycpu
+          image: skrisacr.azurecr.io/buggyapp:v1
+          resources:
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+            requests:
+              cpu: "300m"
+              memory: "256Mi"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: buggycpu-hpa
+  namespace: default
+  labels:
+    app: buggycpu
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: buggycpu
+  minReplicas: 1
+  maxReplicas: 25
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+

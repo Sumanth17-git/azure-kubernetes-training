@@ -1,0 +1,56 @@
+# 4-springboot-app.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+  labels:
+    app: springboot-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-app
+          image: sumanth17121988/springbootdb:1
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: creditcard_service
+            - name: SERVER_PORT
+              value: "9090"
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-loadbalancer:5432/springbootdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: admin@123      
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+  labels:
+    app: springboot-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: springboot-app
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+

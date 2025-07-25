@@ -1,0 +1,23 @@
+# springboot-pdb-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-app
+          image: sumanth17121988/appjava:1
+          ports:
+            - containerPort: 8881
+      nodeSelector:
+          agentpool: appnode
+

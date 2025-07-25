@@ -1,0 +1,14 @@
+# pod-on-new-nodepool.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-newpool
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+  nodeSelector:
+    env: stage     # This targets nodes in the 'nodepool1' node pool
+

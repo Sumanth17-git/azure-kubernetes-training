@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-blue
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: springboot-blue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: springboot-blue
+    spec:
+      containers:
+        - name: springboot
+          image: skrisacr.azurecr.io/springbootapp:v1
+          ports:
+            - containerPort: 8881
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service-blue
+spec:
+  type: LoadBalancer
+  selector:
+    app: springboot-blue
+  ports:
+    - port: 8881
+      targetPort: 8881
+      protocol: TCP
+

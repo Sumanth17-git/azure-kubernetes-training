@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azurefile-pvc
+spec:
+  accessModes:
+    - ReadWriteMany   # ✅ Shared access
+  storageClassName: azurefile-csi-rwx
+  resources:
+    requests:
+      storage: 5Gi
+

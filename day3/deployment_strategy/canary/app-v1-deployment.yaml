@@ -1,0 +1,44 @@
+# app-v1-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-v1
+  labels:
+    app: myapp
+    version: v1
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: html
+          configMap:
+            name: v1-html
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: v1-html
+data:
+  index.html: |
+    <html><body><h1>Welcome to V1</h1></body></html>
+

@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-tomcat
+  template:
+    metadata:
+      labels:
+        app: nginx-tomcat
+    spec:
+      containers:
+        - name: tomcat
+          image: tomcat:9.0
+          ports:
+            - containerPort: 8080
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-tomcat-svc
+spec:
+  selector:
+    app: nginx-tomcat
+  ports:
+    - protocol: TCP
+      port: 80       # External port
+      targetPort: 80 # NGINX container port
+  type: LoadBalancer
+

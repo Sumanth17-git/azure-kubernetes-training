@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: springboot-ingress
+  namespace: ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/json
+        pathType: Prefix
+        backend:
+          service:
+            name: springboot-app-service
+            port:
+              number: 8881
+

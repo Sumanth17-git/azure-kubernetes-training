@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggycpu
+  labels:
+    app: buggycpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buggycpu
+  template:
+    metadata:
+      labels:
+        app: buggycpu
+    spec:
+      containers:
+        - name: buggycpu
+          image: sumanth17121988/buggyapp:v1
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+        - name: idle
+          image: nginx
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+
+---
+# ❌ Default HPA (averages CPU usage across all containers)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: buggycpu-default-hpa
+  labels:
+    app: buggycpu
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: buggycpu
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+

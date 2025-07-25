@@ -1,0 +1,28 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "buggycpu"
+  namespace: "default"
+  labels:
+    app: "buggycpu"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "buggycpu"
+  template:
+    metadata:
+      labels:
+        app: "buggycpu"
+    spec:
+      containers:
+      - name: buggycpu
+        image: sumanth17121988/buggyapp:v1
+        resources:
+          limits:
+            cpu: "1000m"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+

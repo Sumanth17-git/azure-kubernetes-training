@@ -1,0 +1,16 @@
+# certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-monitorminds-tls
+spec:
+  secretName: app-monitorminds-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: app.monitorminds.net
+  dnsNames:
+  - app.monitorminds.net
+  usages:
+    - digital signature
+    - key encipherment

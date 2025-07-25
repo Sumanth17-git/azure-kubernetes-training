@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-redis-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-redis-app
+  template:
+    metadata:
+      labels:
+        app: flask-redis-app
+    spec:
+      containers:
+        - name: flask
+          image: skrisacr.azurecr.io/flask-redis-app:v1
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REDIS_HOST
+              value: redis-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-redis-service
+spec:
+  selector:
+    app: flask-redis-app
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: LoadBalancer
+

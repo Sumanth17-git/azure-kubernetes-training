@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: attacker
+  labels:
+    app: attacker
+spec:
+  containers:
+  - name: curlbox
+    image: radial/busyboxplus:curl
+    command: ["sleep", "3600"]
