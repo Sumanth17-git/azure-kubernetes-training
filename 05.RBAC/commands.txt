@@ -3,7 +3,7 @@ kubectl apply -f service-account.yaml
 
 kubectl apply -f role.yaml
 kubectl apply -f rolebinding.yaml
-
+kubectl get serviceaccount dummy-user -n demo-rbac
 kubectl apply -f test-pod.yaml
 kubectl run nginx --image=nginx -n dev
 kubectl exec -n demo-rbac -it rbac-test -- /bin/sh
