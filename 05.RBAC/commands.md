@@ -1,3 +1,4 @@
+'''bash
 kubectl create namespace demo-rbac
 kubectl apply -f service-account.yaml
 
@@ -14,7 +15,7 @@ kubectl get pods -n demo-rbac
 kubectl delete pod testpod -n demo-rbac
 kubectl run anotherpod --image=nginx --restart=Never -n default
 
-
+'''
 verbs: ["get", "list", "watch"]  # Remove create/delete
 
 # Full Permission
