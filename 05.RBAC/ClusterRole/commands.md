@@ -29,4 +29,10 @@ roleRef:
 ```bash
 kubectl apply -f clusterrole.yaml
 kubectl apply -f clusterrolebinding.yaml
+kubectl describe clusterrole pod-admin
+kubectl describe clusterrolebinding pod-admin-binding
+kubectl get serviceaccounts -n demo-rbac
+kubectl get roles -n demo-rbac
+kubectl get rolebindings -n demo-rbac
+
 ```
