@@ -1,4 +1,4 @@
-'''bash
+```bash
 kubectl create namespace demo-rbac
 kubectl apply -f service-account.yaml
 
@@ -14,12 +14,10 @@ kubectl get secrets -n demo-rbac
 kubectl get pods -n demo-rbac
 kubectl delete pod testpod -n demo-rbac
 kubectl run anotherpod --image=nginx --restart=Never -n default
-
-'''
 verbs: ["get", "list", "watch"]  # Remove create/delete
-
+```
 # Full Permission
-'''yaml
+```yaml
 # role-full-access.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -31,9 +29,6 @@ rules:
   resources: ["*"]         # All resource types
   verbs: ["*"]             # All actions (get, list, create, delete, etc.)
 
-'''
-
-'''yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -71,5 +66,4 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["roles", "rolebindings"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-
-'''
+```
