@@ -16,7 +16,7 @@ kubectl delete pod testpod -n demo-rbac
 kubectl run anotherpod --image=nginx --restart=Never -n default
 verbs: ["get", "list", "watch"]  # Remove create/delete
 ```
-# Full Permission
+
 ```yaml
 # role-full-access.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -28,7 +28,9 @@ rules:
 - apiGroups: ["*"]         # All API groups
   resources: ["*"]         # All resource types
   verbs: ["*"]             # All actions (get, list, create, delete, etc.)
-
+```
+```yaml
+## Full Permission
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
